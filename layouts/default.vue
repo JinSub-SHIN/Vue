@@ -21,12 +21,11 @@ a-layout
 <script>
 import MenuVue from "../components/common-components/Menu.vue";
 import Logo from "../components/common-components/Logo.vue";
-import HeaderTitleVue from "../components/common-components/HeaderTitle.vue";
 import MenuTitleVue from "../components/common-components/MenuTitle.vue";
 import { message } from "ant-design-vue";
 export default {
   name: "Layout",
-  components: { MenuVue, Logo , HeaderTitleVue , MenuTitleVue },
+  components: { MenuVue, Logo , MenuTitleVue },
 
     watch: {
     $route(to, from) {

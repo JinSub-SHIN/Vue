@@ -1,12 +1,10 @@
 <template>
   <div>
-    <!-- <HeaderTitleVue :title="string" />     -->
     <NoticeDetailVue />
   </div>
 </template>
 
 <script>
-import HeaderTitleVue from "../../../components/common-components/HeaderTitle.vue";
 import NoticeDetailVue from "../../../components/pages/NoticeDetail.vue";
 export default({
   data() {
@@ -16,7 +14,7 @@ export default({
   },
 
   components: {
-    HeaderTitleVue, NoticeDetailVue
+    NoticeDetailVue
   },
 
   validate({ params }) {

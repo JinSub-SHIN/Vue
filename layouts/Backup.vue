@@ -6,7 +6,6 @@ a-layout.total
           MenuVue
     a-layout-content.content
         div.content_inner
-          HeaderTitleVue
         div.content_inner
           a-row(type="flex")
             a-col(flex="300px")
@@ -21,11 +20,10 @@ a-layout.total
 <script>
 import MenuVue from "../components/common-components/Menu.vue";
 import Logo from "../components/common-components/Logo.vue";
-import HeaderTitleVue from "../components/common-components/HeaderTitle.vue";
 import { message } from "ant-design-vue";
 export default {
   name: "Layout",
-  components: { MenuVue, Logo , HeaderTitleVue },
+  components: { MenuVue, Logo },
 
     watch: {
     $route(to, from) {

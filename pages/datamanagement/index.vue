@@ -1,12 +1,9 @@
 <template lang="pug">
 div
-    //- HeaderTitleVue(:title="string")
-    //- TestVue
     DataListVue
 </template>
 
 <script>
-import HeaderTitleVue from "../../components/common-components/HeaderTitle.vue";
 import DataListVue from "../../components/pages/datamanagement/DataList.vue";
 import TestVue from "../../components/pages/datamanagement/Test.vue";
     export default {
@@ -17,7 +14,7 @@ import TestVue from "../../components/pages/datamanagement/Test.vue";
         },
 
         components : {
-            HeaderTitleVue , DataListVue , TestVue
+             DataListVue , TestVue
         }
     }
 </script>
