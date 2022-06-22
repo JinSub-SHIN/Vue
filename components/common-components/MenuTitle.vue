@@ -1,19 +1,26 @@
 <template>
   <div>
-    <span class="menuTitle">{{ headertitle }}</span>
+    <span class="menuTitle">{{ id }}</span>
   </div>
 </template>
 
 <script>
-export default {
-  computed: {
-      headertitle() {
-          console.log(this.$store.state.header.headerTitle)
-          return this.$store.state.header.headerTitle; 
-    
-        },
-  }
-};
+import {
+  defineComponent,
+  useRouter,
+  reactive,
+  useStore,
+  computed,
+} from "@nuxtjs/composition-api";
+export default defineComponent({
+  setup() {
+      const store = useStore();
+      const id = computed(() => store.state.header.headerTitle);
+      return {
+          id,
+      }
+  },
+});
 </script>
 
 <style lang="scss" scoped>

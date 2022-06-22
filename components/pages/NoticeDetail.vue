@@ -35,10 +35,15 @@
       </a-form-item>
 
       <a-divider class="divider" />
-      <a-form-item label="소속" required>
-        <a-select v-model:value="formState.region" placeholder="기업 선택">
-          <a-select-option value="Watt">Watt</a-select-option>
-          <a-select-option value="JS">JS Company</a-select-option>
+      <a-form-item label="소속">
+        <a-select
+          v-model:value="formState.region"
+          placeholder="기업 선택"
+          disabled
+        >
+          <a-select-option value="Watt">와트</a-select-option>
+          <a-select-option value="Power1">파워톡</a-select-option>
+          <a-select-option value="Power2">파워톡2</a-select-option>
         </a-select>
       </a-form-item>
 
@@ -56,6 +61,11 @@
           >수정
           <span class="tooltiptext">필수 값을 입력하세요</span>
         </a-button>
+        <a-button
+          @click="showConfirm"
+          style="margin-left: 10px; background-color: red; color: white"
+          >삭제</a-button
+        >
         <a-button style="margin-left: 10px" @click="historyBack">목록</a-button>
       </a-form-item>
     </a-form>
@@ -72,7 +82,10 @@ import {
   computed,
   watch,
   useContext,
+  createVNode,
 } from "@nuxtjs/composition-api";
+import { Modal } from "ant-design-vue";
+// import { message } from "ant-design-vue";
 export default defineComponent({
   setup() {
     const router = useRouter();
@@ -92,49 +105,120 @@ export default defineComponent({
       desc: "",
     });
 
+    const getTimeZone = (standard) => {
+      const now = new Date(standard * 1000);
+      const month = ("0" + (now.getMonth() + 1)).slice(-2);
+      const date = ("0" + now.getDate()).slice(-2);
+      const hours = ("0" + now.getHours()).slice(-2);
+      const minutes = ("0" + now.getMinutes()).slice(-2);
+      const seconds = ("0" + now.getSeconds()).slice(-2);
+
+      console.log(now);
+
+      const convertToDate =
+        now.getFullYear() +
+        "-" +
+        month +
+        "-" +
+        date +
+        " " +
+        hours +
+        ":" +
+        minutes +
+        ":" +
+        seconds;
+
+      return convertToDate;
+    };
+
     $axios
       .post("https://dev.watttalk.kr:8221/noticeRest/noti_info_one", {
         noti_seq: id,
         jwt: sessionStorage.getItem("user"),
       })
       .then((res) => {
+        var formatTime = getTimeZone(new Date(res.data[0].save_time));
         formState.name = res.data[0].user_name;
         formState.region = res.data[0].en_alias;
         formState.desc = res.data[0].content;
-        formState.expiration = '2022-06-21 09:17:11'; 
+        formState.expiration = formatTime;
       })
       .catch((err) => {
         console.log(err);
         error();
       });
 
-    
-
     const historyBack = () => {
       router.push("/notice");
     };
 
+    const deleteHandler = () => {
+      $axios
+        .post("https://dev.watttalk.kr:8221/noticeRest/noti_delete", {
+          noti_seq: id,
+          jwt: sessionStorage.getItem("user"),
+        })
+        .then((res) => {
+          console.log(res);
+          router.push("/notice");
+        })
+        .catch((err) => {
+          console.log(err);
+          error();
+        });
+    };
+
+    const showConfirm = () => {
+      Modal.confirm({
+        title: "해당 게시글을 삭제하시겠습니까?",
+        // icon: createVNode(ExclamationCircleOutlined),
+        // content: createVNode(
+        //   "div",
+        //   {
+        //     style: "color:red;",
+        //   },
+        //   "Some descriptions"
+        // ),
+        okText: "삭제",
+        cancelText : '취소',
+
+        onOk() {
+          console.log("OK");
+          deleteHandler();
+        },
+
+        onCancel() {
+          console.log("Cancel");
+        },
+
+        class: "test",
+      });
+    };
+
     const onSubmit = (e) => {
       e.preventDefault();
-
       console.log("submit!", toRaw(formState));
-      var expiration = formState.expiration;
+      // var expiration = formState.expiration;
       var desc = formState.desc;
-      var region = formState.region;
-      var name = formState.name;
+      // var region = formState.region;
+      // var name = formState.name;
 
-      var array = [];
-
-      array.push(id + 1);
-      array.push(desc);
-      array.push(expiration);
-      array.push(expiration);
-      array.push(name);
-      array.push(region);
-
-      console.log(array);
-      vuex_store.commit("notice/setData", array);
-      router.push("/notice");
+      var NumberDate = Math.floor(new Date(formState.expiration) / 1000);
+      $axios
+        .post("https://dev.watttalk.kr:8221/noticeRest/noti_update", {
+          noti_seq: id,
+          content: desc,
+          effective_date: NumberDate,
+          jwt: sessionStorage.getItem("user"),
+        })
+        .then((res) => {
+          console.log(res);
+          router.push("/notice");
+        })
+        .catch((err) => {
+          console.log(err);
+          error();
+        });
     };
 
     return {
@@ -147,14 +231,9 @@ export default defineComponent({
       formState,
       onSubmit,
       historyBack,
+      showConfirm,
     };
   },
-
-  // methods: {
-  //   historyBack: function () {
-  //     this.$router.push("/");
-  //   },
-  // },
 });
 </script>
 

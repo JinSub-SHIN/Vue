@@ -37,8 +37,9 @@
       <a-divider class="divider" />
       <a-form-item label="소속" required>
         <a-select v-model:value="formState.region" placeholder="기업 선택">
-          <a-select-option value="Watt">Watt</a-select-option>
-          <a-select-option value="JS">JS Company</a-select-option>
+          <a-select-option value="Watt">와트</a-select-option>
+          <a-select-option value="Power1">파워톡</a-select-option>
+          <a-select-option value="Power2">파워톡2</a-select-option>
         </a-select>
       </a-form-item>
 
@@ -67,42 +68,77 @@ import {
   useRouter,
   reactive,
   useStore,
+  toRaw,
+  useContext,
 } from "@nuxtjs/composition-api";
+import { message } from "ant-design-vue";
 export default defineComponent({
   setup() {
     const formState = reactive({
-      name: "신진섭",
+      name: sessionStorage.getItem("userName"),
       region: undefined,
       expiration: undefined,
       desc: "",
     });
     const router = useRouter();
     const vuex_store = useStore();
+    const { $axios } = useContext();
 
     const historyBack = () => {
       router.push("/notice");
     };
 
+        const getTimeZone = (standard) => {
+      const now = new Date(standard * 1000)
+      const month = ("0" + (now.getMonth() + 1)).slice(-2)
+      const date = ("0" + now.getDate()).slice(-2)
+      const hours = ("0" + now.getHours()).slice(-2)
+      const minutes = ("0" + now.getMinutes()).slice(-2)
+      const seconds = ("0" + now.getSeconds()).slice(-2)
+
+      console.log(now);
+
+      const convertToDate =
+        now.getFullYear() +
+        "-" +
+        month +
+        "-" +
+        date +
+        " " +
+        hours +
+        ":" +
+        minutes +
+        ":" +
+        seconds
+
+      return convertToDate
+    }
+
     const onSubmit = (e) => {
       e.preventDefault();
-
-      // console.log("submit!", toRaw(formState));
+      console.log("submit!", toRaw(formState));
       var expiration = formState.expiration;
       var desc = formState.desc;
       var region = formState.region;
       var name = formState.name;
 
-      var array = [];
-      var seq = vuex_store.getters["notice/getSeq"];
-      array.push(seq + 1);
-      array.push(desc);
-      array.push(expiration);
-      array.push(expiration);
-      array.push(name);
-      array.push(region);
-      console.log(array);
-      vuex_store.commit("notice/add", array);
-      router.push("/notice");
+      var NumberDate = Math.floor(new Date(formState.expiration) / 1000);
+      $axios
+        .post("https://dev.watttalk.kr:8221/noticeRest/noti_insert", {
+          en_seq: 1,
+          content: desc,
+          save_time : Math.floor(new Date() / 1000),
+          jwt: sessionStorage.getItem('user'),
+          effective_date : NumberDate
+        })
+        .then((res) => {
+          console.log(res);
+          router.push("/notice");
+        })
+        .catch((err) => {
+          console.log(err);
+          error();
+        });      
     };
     return {
       labelCol: {

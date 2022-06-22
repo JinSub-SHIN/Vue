@@ -79,6 +79,7 @@ export default defineComponent({
             formState.userToken = res.data[2];
             // console.log(formState.userToken);
             sessionStorage.setItem("user", formState.userToken);
+            sessionStorage.setItem("userName" , formState.username);
             store.commit("login/changeStatus");
             route.push("/");
           } else {

@@ -50,9 +50,4 @@ export default {
   build: {
   },
 
-  target: 'static',
-  router: {
-    base : '/JinSub-SHIN/Vue'
-  }
-
 }
