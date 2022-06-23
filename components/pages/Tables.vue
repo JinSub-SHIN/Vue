@@ -28,15 +28,11 @@ div
 import {
   defineComponent,
   reactive,
-  toRaw,
-  useStore,
-  computed,
   useRouter,
   useContext,
 } from "@nuxtjs/composition-api";
 export default defineComponent({
   setup() {
-    const vuex_store = useStore();
     const router = useRouter();
     const { $axios } = useContext();
 
@@ -54,7 +50,7 @@ export default defineComponent({
       const minutes = ("0" + now.getMinutes()).slice(-2);
       const seconds = ("0" + now.getSeconds()).slice(-2);
 
-      console.log(now);
+      // console.log(now);
 
       const convertToDate =
         now.getFullYear() +
@@ -85,8 +81,8 @@ export default defineComponent({
         data.dataArray.push(...res.data);
       })
       .catch((err) => {
-        console.log(err);
-        error();
+        // console.log(err);
+        error(err);
       });
 
     const infiniteHandler = ($state) => {
@@ -113,8 +109,8 @@ export default defineComponent({
           }, 1000);
         })
         .catch((err) => {
-          console.log(err);
-          error();
+          // console.log(err);
+          error(err);
         });
     };
 
