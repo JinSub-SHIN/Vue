@@ -86,7 +86,7 @@ $maxWidth: 960px;
 
 .content_inner {
   max-width: maxWidth;
-  margin-top : 100px;
+  margin-top : 50px;
   padding: 0 px;
 }
 

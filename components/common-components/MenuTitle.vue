@@ -27,5 +27,8 @@ export default defineComponent({
 .menuTitle {
   color: white;
   line-height: 100px;
+  margin-left:200px;
+  font-size:20px;
+//   position: relative;
 }
 </style>
