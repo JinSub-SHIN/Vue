@@ -20,13 +20,6 @@ export default {
   name: "Layout",
   components: { MenuVue, Logo },
 
-  watch: {
-    $route(to, from) {
-      console.log("route change to", to);
-      console.log("route change from", from);
-    },
-  },
-
   middleware({ redirect }) {
     // 만약 유저가 인증 받지 못한 경우 로그인 페이지로 이동합니다.
     if (sessionStorage.getItem("user") === null) {

@@ -6,12 +6,6 @@ div
 
 <script>
 export default {
-  watch: {
-    $route(to, from) {
-      console.log("route change to", to);
-      console.log("route change from", from);
-    },
-  },
 };
 </script>
 

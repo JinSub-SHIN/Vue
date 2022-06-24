@@ -34,14 +34,14 @@ export default {
     },
   },
 
-    middleware({ redirect }) {
-      // 만약 유저가 인증 받지 못한 경우 로그인 페이지로 이동합니다.
-      // console.log(sessionStorage.getItem("user"));
-      if (sessionStorage.getItem("user") === null) {
-        message.error("로그인 후 이용하세요");
-        return redirect("/login");
-      }
-    },
+    // middleware({ redirect }) {
+    //   // 만약 유저가 인증 받지 못한 경우 로그인 페이지로 이동합니다.
+    //   // console.log(sessionStorage.getItem("user"));
+    //   if (sessionStorage.getItem("user") === null) {
+    //     message.error("로그인 후 이용하세요");
+    //     return redirect("/login");
+    //   }
+    // },
 
 };
 </script>
